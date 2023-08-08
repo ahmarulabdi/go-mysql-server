@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 )
 
@@ -13,6 +14,8 @@ const (
 func main() {
 	mysqlOsArch := getMysqlOsArch()
 	fmt.Println(mysqlOsArch)
+
+	fmt.Println(isDataDirExists(mysqlOsArch))
 }
 
 func getMysqlOsArch() string {
@@ -20,4 +23,17 @@ func getMysqlOsArch() string {
 	goarch := runtime.GOARCH
 
 	return "mysql-" + goos + "-" + goarch
+}
+
+func isDataDirExists(osArch string) bool {
+	switch osArch {
+	case MYSQL_WINDOWS_AMD64:
+		_, err := os.Stat(MYSQL_WINDOWS_AMD64 + "\\data")
+		if err != nil {
+			return false
+		}
+		return true
+	}
+
+	return false
 }
