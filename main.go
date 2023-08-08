@@ -1,25 +1,17 @@
 package main
 
 import (
+	"ahmarulabdi/gomysqlserver/m/config"
+	"ahmarulabdi/gomysqlserver/m/helpers"
 	"fmt"
-	"os"
 	"os/exec"
-	"runtime"
-	"syscall"
-
-	"golang.org/x/term"
-)
-
-const (
-	MYSQL_WINDOWS_AMD64 = "mysql-windows-amd64"
-	MYSQL_LINUX_AMD64   = "mysql-linux-amd64"
 )
 
 func main() {
-	mysqlOsArch := getMysqlOsArch()
+	mysqlOsArch := helpers.GetMysqlOsArch()
 	fmt.Println(mysqlOsArch)
 
-	if isDataDirExists(mysqlOsArch) {
+	if helpers.IsDataDirExists(mysqlOsArch) {
 		runService(mysqlOsArch)
 	} else {
 		runSetup(mysqlOsArch)
@@ -28,8 +20,8 @@ func main() {
 
 func runService(mysqlOsArch string) {
 	switch mysqlOsArch {
-	case MYSQL_WINDOWS_AMD64:
-		cmd := exec.Command("cmd", "/c", "start", "cmd", "/K", MYSQL_WINDOWS_AMD64+"\\bin\\mysqld.exe --console")
+	case config.MYSQL_WINDOWS_AMD64:
+		cmd := exec.Command("cmd", "/c", "start", "cmd", "/K", config.MYSQL_WINDOWS_AMD64+"\\bin\\mysqld.exe --console")
 		err := cmd.Run()
 		if err != nil {
 			panic(err)
@@ -39,28 +31,28 @@ func runService(mysqlOsArch string) {
 
 func runSetup(mysqlOsArch string) {
 	switch mysqlOsArch {
-	case MYSQL_WINDOWS_AMD64:
-		password := setupPassword()
+	case config.MYSQL_WINDOWS_AMD64:
+		password := helpers.SetupPassword()
 		if password == "" {
 			return
 		}
 
 		fmt.Println("\nPlease wait...")
 		// init
-		cmd := exec.Command(MYSQL_WINDOWS_AMD64+"/bin/mysqld", "--initialize-insecure")
+		cmd := exec.Command(config.MYSQL_WINDOWS_AMD64+"/bin/mysqld", "--initialize-insecure")
 		err := cmd.Run()
 		if err != nil {
 			fmt.Println(err.Error())
 		}
 
 		// run mysql service
-		runService(MYSQL_WINDOWS_AMD64)
+		runService(config.MYSQL_WINDOWS_AMD64)
 		fmt.Println("Run database server...")
 
 		// Command and its arguments as separate elements
 		args := []string{"-u", "root"}
 		// Create the exec.Cmd object
-		cmd3 := exec.Command(MYSQL_WINDOWS_AMD64+"/bin/mysql.exe", args...)
+		cmd3 := exec.Command(config.MYSQL_WINDOWS_AMD64+"/bin/mysql.exe", args...)
 		fmt.Println("Creating new credential on it...")
 
 		// Get a writable pipe to the command's standard input
@@ -96,49 +88,4 @@ func runSetup(mysqlOsArch string) {
 
 		fmt.Println("DONE!")
 	}
-}
-
-func getMysqlOsArch() string {
-	goos := runtime.GOOS
-	goarch := runtime.GOARCH
-
-	return "mysql-" + goos + "-" + goarch
-}
-
-func isDataDirExists(osArch string) bool {
-	switch osArch {
-	case MYSQL_WINDOWS_AMD64:
-		_, err := os.Stat(MYSQL_WINDOWS_AMD64 + "\\data")
-		if err != nil {
-			return false
-		}
-		return true
-	}
-
-	return false
-}
-
-func setupPassword() string {
-	fmt.Print("Database credential doesn't exists, please create your new credential\n\n")
-	fmt.Print("\nPassword:")
-	password := getPasswordInput()
-
-	fmt.Print("\nPassword confirmation:")
-	passwordConfirmation := getPasswordInput()
-
-	if password != passwordConfirmation {
-		fmt.Println("\n\nPassword confirmation is not same!")
-		return ""
-	}
-
-	return password
-}
-
-func getPasswordInput() string {
-	result, err := term.ReadPassword(int(syscall.Stdin))
-	if err != nil {
-		fmt.Println("Error reading password:", err.Error())
-	}
-
-	return string(result)
 }
