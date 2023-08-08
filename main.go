@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"runtime"
 )
 
@@ -15,7 +16,20 @@ func main() {
 	mysqlOsArch := getMysqlOsArch()
 	fmt.Println(mysqlOsArch)
 
-	fmt.Println(isDataDirExists(mysqlOsArch))
+	if isDataDirExists(mysqlOsArch) {
+		runService(mysqlOsArch)
+	}
+}
+
+func runService(mysqlOsArch string) {
+	switch mysqlOsArch {
+	case MYSQL_WINDOWS_AMD64:
+		cmd := exec.Command("cmd", "/c", "start", "cmd", "/K", MYSQL_WINDOWS_AMD64+"\\bin\\mysqld.exe --console")
+		err := cmd.Run()
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func getMysqlOsArch() string {
