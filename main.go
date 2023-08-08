@@ -5,6 +5,11 @@ import (
 	"runtime"
 )
 
+const (
+	WINDOWS_AMD64 = "windows-amd64"
+	LINUX_AMD64   = "linux-amd64"
+)
+
 func main() {
 	osArch := getOsArch()
 	fmt.Println(osArch)
