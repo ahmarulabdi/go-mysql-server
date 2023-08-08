@@ -6,18 +6,18 @@ import (
 )
 
 const (
-	WINDOWS_AMD64 = "windows-amd64"
-	LINUX_AMD64   = "linux-amd64"
+	MYSQL_WINDOWS_AMD64 = "mysql-windows-amd64"
+	MYSQL_LINUX_AMD64   = "mysql-linux-amd64"
 )
 
 func main() {
-	osArch := getOsArch()
-	fmt.Println(osArch)
+	mysqlOsArch := getMysqlOsArch()
+	fmt.Println(mysqlOsArch)
 }
 
-func getOsArch() string {
+func getMysqlOsArch() string {
 	goos := runtime.GOOS
 	goarch := runtime.GOARCH
 
-	return goos + "-" + goarch
+	return "mysql-" + goos + "-" + goarch
 }
