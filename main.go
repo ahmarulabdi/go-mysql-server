@@ -40,15 +40,8 @@ func runService(mysqlOsArch string) {
 func runSetup(mysqlOsArch string) {
 	switch mysqlOsArch {
 	case MYSQL_WINDOWS_AMD64:
-		fmt.Print("Database credential doesn't exists, please create your new credential\n\n")
-		fmt.Print("\nPassword:")
-		password := getPasswordInput()
-
-		fmt.Print("\nPassword confirmation:")
-		passwordConfirmation := getPasswordInput()
-
-		if password != passwordConfirmation {
-			fmt.Println("\n\nPassword confirmation is not same!")
+		password := setupPassword()
+		if password == "" {
 			return
 		}
 
@@ -123,6 +116,22 @@ func isDataDirExists(osArch string) bool {
 	}
 
 	return false
+}
+
+func setupPassword() string {
+	fmt.Print("Database credential doesn't exists, please create your new credential\n\n")
+	fmt.Print("\nPassword:")
+	password := getPasswordInput()
+
+	fmt.Print("\nPassword confirmation:")
+	passwordConfirmation := getPasswordInput()
+
+	if password != passwordConfirmation {
+		fmt.Println("\n\nPassword confirmation is not same!")
+		return ""
+	}
+
+	return password
 }
 
 func getPasswordInput() string {
