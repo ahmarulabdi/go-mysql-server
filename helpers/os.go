@@ -16,7 +16,7 @@ func GetMysqlOsArch() string {
 func IsDataDirExists(osArch string) bool {
 	switch osArch {
 	case config.MYSQL_WINDOWS_AMD64:
-		_, err := os.Stat(config.MYSQL_WINDOWS_AMD64 + "\\data")
+		_, err := os.Stat("mysql\\data")
 		if err != nil {
 			return false
 		}

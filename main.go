@@ -33,7 +33,7 @@ func main() {
 func runService(mysqlOsArch string) {
 	switch mysqlOsArch {
 	case config.MYSQL_WINDOWS_AMD64:
-		cmd := exec.Command("cmd", "/c", "start", "cmd", "/K", config.MYSQL_WINDOWS_AMD64+"\\bin\\mysqld.exe --console")
+		cmd := exec.Command("cmd", "/c", "start", "cmd", "/K", "mysql\\bin\\mysqld.exe --console")
 		err := cmd.Run()
 		if err != nil {
 			panic(err)
@@ -58,7 +58,7 @@ func runSetup(mysqlOsArch string) {
 
 		fmt.Println("\nPlease wait...")
 		// init
-		cmd := exec.Command(config.MYSQL_WINDOWS_AMD64+"/bin/mysqld", "--initialize-insecure")
+		cmd := exec.Command("mysql/bin/mysqld", "--initialize-insecure")
 		err := cmd.Run()
 		if err != nil {
 			fmt.Println(err.Error())
@@ -71,7 +71,7 @@ func runSetup(mysqlOsArch string) {
 		// Command and its arguments as separate elements
 		args := []string{"-u", "root"}
 		// Create the exec.Cmd object
-		cmd3 := exec.Command(config.MYSQL_WINDOWS_AMD64+"/bin/mysql.exe", args...)
+		cmd3 := exec.Command("mysql/bin/mysql.exe", args...)
 		fmt.Println("Creating new credential on it...")
 
 		// Get a writable pipe to the command's standard input
