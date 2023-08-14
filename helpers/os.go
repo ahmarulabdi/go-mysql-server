@@ -22,7 +22,7 @@ func IsDataDirExists(osArch string) bool {
 		}
 		return true
 	case config.MYSQL_LINUX_AMD64:
-		_, err := os.Stat(config.MYSQL_LINUX_AMD64 + "/data")
+		_, err := os.Stat("mysql/data")
 		if err != nil {
 			return false
 		}

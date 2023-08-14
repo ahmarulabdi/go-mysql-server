@@ -39,7 +39,7 @@ func runService(mysqlOsArch string) {
 			panic(err)
 		}
 	case config.MYSQL_LINUX_AMD64:
-		cmd := exec.Command("x-terminal-emulator", "-e", "bash -c './"+config.MYSQL_LINUX_AMD64+"/bin/mysqld --console "+config.LINUX_BASE_DIR_FLAG+" "+config.LINUX_DATA_DIR_FLAG+"'")
+		cmd := exec.Command("x-terminal-emulator", "-e", "bash -c './mysql/bin/mysqld --console "+config.LINUX_BASE_DIR_FLAG+" "+config.LINUX_DATA_DIR_FLAG+"'")
 		err := cmd.Run()
 		fmt.Println("run command", cmd.String())
 		if err != nil {
@@ -115,7 +115,7 @@ func runSetup(mysqlOsArch string) {
 
 		fmt.Println("\nPlease wait...")
 		// init
-		cmd := exec.Command("./"+config.MYSQL_LINUX_AMD64+"/bin/mysqld", "--initialize-insecure", config.LINUX_BASE_DIR_FLAG, config.LINUX_DATA_DIR_FLAG)
+		cmd := exec.Command("./mysql/bin/mysqld", "--initialize-insecure", config.LINUX_BASE_DIR_FLAG, config.LINUX_DATA_DIR_FLAG)
 		fmt.Println("init mysql data with command:", cmd.String())
 		err := cmd.Run()
 		if err != nil {
@@ -131,7 +131,7 @@ func runSetup(mysqlOsArch string) {
 		// Command and its arguments as separate elements
 		args := []string{"-u", "root"}
 		// Create the exec.Cmd object
-		cmd3 := exec.Command(config.MYSQL_LINUX_AMD64+"/bin/mysql", args...)
+		cmd3 := exec.Command("mysql/bin/mysql", args...)
 		fmt.Println("Creating new credential on it...")
 
 		// Get a writable pipe to the command's standard input
