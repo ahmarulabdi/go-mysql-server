@@ -12,11 +12,8 @@ func main() {
 	mysqlOsArch := helpers.GetMysqlOsArch()
 	fmt.Println(mysqlOsArch)
 
-	fmt.Println("Readme first!")
 	fmt.Println(`
-	Mysql folder each OS ARCH:
-	- mysql-windows-amd64: mysql folder for mysql OS windows architecture amd64
-	- mysql-linux-amd64: mysql folder for mysql OS linux architecture amd64
+	Wellcome to go-Mysql server
 	`)
 	fmt.Println("Press <Enter> to continue!")
 	fmt.Scanln()
